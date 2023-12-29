@@ -61,3 +61,8 @@ def homePage(request):
     context = {'form': ImageForm()}
 
     return HttpResponse(template.render(context,request))
+
+def refferalPage(request):
+    template = loader.get_template('refferal.html')
+
+    return HttpResponse(template.render(None,request))
