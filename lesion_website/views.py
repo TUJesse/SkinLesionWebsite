@@ -63,6 +63,35 @@ def homePage(request):
     return HttpResponse(template.render(context,request))
 
 def refferalPage(request):
-    template = loader.get_template('refferal.html')
+    from googleplaces import GooglePlaces, types, lang
 
-    return HttpResponse(template.render(None,request))
+    API_KEY = ('AIzaSyB3ZbQXl3kDtdlyFbhvJarw2-mXoFbh-2o')  #Google Maps API Key
+    google_places = GooglePlaces(API_KEY)
+    data_received = request.POST.get('data')
+    data_received2 = request.POST.get('data2')
+
+
+    lat_lng = {'lat': 53.402040, 'lng': -6.407640}  # Replace with your latitude and longitude
+    #numbers are none FIX THISSSSSSSSSSSS
+    #lat_lng = {'lat': data_received, 'lng': data_received2}
+    radius = 5000  # Radius in meters
+
+    # Perform the nearby search for hospitals
+    query_result = google_places.nearby_search(lat_lng=lat_lng, radius=radius, types=[types.TYPE_HOSPITAL])
+
+    hospitalList = []
+
+    # Print the results
+    for place in query_result.places:
+        place.get_details()
+
+        s = ""
+        s = s + place.name + '\n' + place.international_phone_number + '\n' + place.url
+        lines = s.split('\n')
+
+        hospitalList.append(lines)
+
+    context = {'hospitalList': hospitalList}
+
+    # return HttpResponse(template.render(None,request))
+    return render(request, 'refferal.html', context)

@@ -13,6 +13,12 @@
 
 <p id="demo"></p>
 
+<div id="list">
+{% for hospital in hospitalList %}
+    <div style="border-style: outset">{{ hospital }}</div>
+{% endfor %}
+</div>
+
 <script>
 const x = document.getElementById("demo");
 
@@ -30,15 +36,18 @@ function showPosition(position) {
 }
 </script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
 
 <script>
-
-    var lat;
+    
+   var lat;
    var lon;
    var map;
    let service;
    var myLatlng;
+   var lat_lng;
    let infowindow;
 
     function myMap() {
@@ -56,6 +65,7 @@ function showPosition(position) {
   lon = position.coords.longitude;
 
   myLatlng = new google.maps.LatLng(lat,lon);
+  lat_lng = {'lat': lat, 'lng': lon};
 
   var mapProp= {
   center:myLatlng,
@@ -79,6 +89,26 @@ service.nearbySearch(request, callback);
 
 {#marker.setMap(map);#}
 }
+
+$.ajax({
+    url: 'http://127.0.0.1:8000/referral/',  // URL of your Django view
+    type: 'post',  // HTTP method, e.g., 'post'
+    data: {
+        'data': lat,  // Send the JavaScript variable
+        'data2': lon,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token for Django
+    },
+    success: function(response) {
+        // Code to execute if the request succeeds;
+        // the response is passed to the function
+        console.log('Success:', response);
+    },
+    error: function(error) {
+        // Code to execute if the request fails; the raw request and
+        // status codes are passed to the function
+        console.log('Error:', error);
+    }
+         });
 
 function callback(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
