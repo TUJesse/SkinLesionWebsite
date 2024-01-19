@@ -64,17 +64,36 @@ def homePage(request):
 
 def refferalPage(request):
     from googleplaces import GooglePlaces, types, lang
+    from django.http import JsonResponse
+    import json
+    from geopy.geocoders import Nominatim
+
+    # calling the Nominatim tool
+    loc = Nominatim(user_agent="GetLoc")
+
+    # entering the location name
+    getLoc = loc.geocode(" 28 Main Street Portlaoise")
+
+    # printing address
+    # print(getLoc.address)
+
+    # printing latitude and longitude
+    # print("Latitude = ", getLoc.latitude, "\n")
+    # print("Longitude = ", getLoc.longitude)
 
     API_KEY = ('AIzaSyB3ZbQXl3kDtdlyFbhvJarw2-mXoFbh-2o')  #Google Maps API Key
     google_places = GooglePlaces(API_KEY)
-    data_received = request.POST.get('data')
-    data_received2 = request.POST.get('data2')
+    data = request.POST
+    # Get the variables by their keys
+    lat = data.get('data')
+    lon = data.get('data2')
 
 
-    lat_lng = {'lat': 53.402040, 'lng': -6.407640}  # Replace with your latitude and longitude
+    #lat_lng = {'lat': 53.402040, 'lng': -6.407640}  # Replace with your latitude and longitude
+    lat_lng = {'lat': getLoc.latitude, 'lng': getLoc.longitude}  # Replace with your latitude and longitude
     #numbers are none FIX THISSSSSSSSSSSS
     #lat_lng = {'lat': data_received, 'lng': data_received2}
-    radius = 5000  # Radius in meters
+    radius = 50000  # Radius in meters
 
     # Perform the nearby search for hospitals
     query_result = google_places.nearby_search(lat_lng=lat_lng, radius=radius, types=[types.TYPE_HOSPITAL])
@@ -86,11 +105,12 @@ def refferalPage(request):
         place.get_details()
 
         s = ""
-        s = s + place.name + '\n' + place.international_phone_number + '\n' + place.url
-        lines = s.split('\n')
+        if place.international_phone_number is not None:
+            s = s + place.name + '\n' + place.international_phone_number + '\n' + place.url
+            lines = s.split('\n')
+            hospitalList.append(lines)
 
-        hospitalList.append(lines)
-
+        # Create a dictionary with the hospitalList as the value
     context = {'hospitalList': hospitalList}
 
     # return HttpResponse(template.render(None,request))

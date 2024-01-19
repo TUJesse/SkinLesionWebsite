@@ -53,7 +53,7 @@ function showPosition(position) {
     function myMap() {
 
         if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
+    navigator.geolocation.getCurrentPosition(showPosition)
   } else {
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
@@ -87,28 +87,31 @@ var request = {
 service = new google.maps.places.PlacesService(map);
 service.nearbySearch(request, callback);
 
+// Add the fetch code here
+  fetch('http://127.0.0.1:8000/referral/', {
+    method: 'post', // HTTP method, e.g., 'post'
+    headers: {
+      'Content-Type': 'application/json', // Specify the content type
+      'X-CSRFToken': '{{ csrf_token }}' // CSRF token for Django
+    },
+    body: JSON.stringify({
+      'data': lat, // Send the JavaScript variable
+      'data2': lon
+    })
+  })
+  .then(response => response.json()) // Convert the response to JSON
+  .then(data => {
+    // Code to execute if the request succeeds;
+    // the data is passed to the function
+    console.log('Success:', data);
+  })
+  .catch(error => {
+    // Code to execute if the request fails; the error is passed to the function
+    console.log('Error:', error);
+  });
+
 {#marker.setMap(map);#}
 }
-
-$.ajax({
-    url: 'http://127.0.0.1:8000/referral/',  // URL of your Django view
-    type: 'post',  // HTTP method, e.g., 'post'
-    data: {
-        'data': lat,  // Send the JavaScript variable
-        'data2': lon,
-        'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token for Django
-    },
-    success: function(response) {
-        // Code to execute if the request succeeds;
-        // the response is passed to the function
-        console.log('Success:', response);
-    },
-    error: function(error) {
-        // Code to execute if the request fails; the raw request and
-        // status codes are passed to the function
-        console.log('Error:', error);
-    }
-         });
 
 function callback(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
