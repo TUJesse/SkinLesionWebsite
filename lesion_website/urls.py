@@ -6,5 +6,7 @@ urlpatterns = [
     path('lesion_website/', views.uploadPage, name="loadModel"),
     path('upload/<predicted_label>', views.resultsPage, name="uploadImage"),
     path('referral/', views.refferalPage, name="referral"),
-    path('home/', views.homePage, name="homePage")
+    path('home/', views.homePage, name="homePage"),
+    path('login/', views.loginPage, name="loginPage"),
+    path('register/', views.registerPage, name="registerPage")
 ]

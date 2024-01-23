@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+
+</head>
+<body>
+
+<header><h1>Register</h1></header>
+
+<form method="POST" action="">
+
+    {% csrf_token %}
+
+{#    {{ form.as_p }}#}
+    {% for field in form %}
+        {{ field.label }}
+        {{ field }}
+        <br>
+    {% endfor %}
+
+    {{ form.errors }}
+    <input type="submit" name="CreateUser">
+</form>
+</body>
+
+</html>

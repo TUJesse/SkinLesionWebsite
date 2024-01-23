@@ -1,6 +1,7 @@
 from django.forms import forms
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -21,11 +22,16 @@ from scipy import stats
 from sklearn.preprocessing import LabelEncoder
 import cv2
 from keras.models import load_model
-from .forms import ImageForm
+# from .forms import ImageForm
+from .forms import *
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+
 
 # Create your views here.
 def uploadPage(request):
-    new_model = load_model(os.path.join('C:\\Users\jesse\OneDrive\Desktop\Year 4\Project\models', 'model50epochs500resample64size.keras'))
+    new_model = load_model(
+        os.path.join('C:\\Users\jesse\OneDrive\Desktop\Year 4\Project\models', 'model50epochs500resample64size.keras'))
     SIZE = 64
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -43,7 +49,7 @@ def uploadPage(request):
 
             predicted_label = " " + class_labels[prediction.argmax()]
 
-            return redirect('uploadImage',predicted_label= predicted_label)
+            return redirect('uploadImage', predicted_label=predicted_label)
 
     elif request.method == 'GET':
         template2 = loader.get_template('imgUpload.html')
@@ -51,16 +57,56 @@ def uploadPage(request):
 
         return HttpResponse(template2.render(context2, request))
 
+
 def resultsPage(request, predicted_label):
     context = {'predicted_label': predicted_label}
 
     return render(request, 'lesion_upload.html', context)
 
+
 def homePage(request):
     template = loader.get_template('homePage.html')
     context = {'form': ImageForm()}
 
-    return HttpResponse(template.render(context,request))
+    return HttpResponse(template.render(context, request))
+
+
+def loginPage(request):
+    template = loader.get_template('login.html')
+    context = {}
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('homePage')
+        else:
+            messages.info(request, 'Username or password is incorrect')
+
+    return render(request, 'login.html', context)
+
+
+def registerPage(request):
+    template = loader.get_template('register.html')
+
+    form = CreateUserForm()
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + username)
+            return redirect('loginPage')
+
+    context = {'form': form}
+
+    return render(request, 'register.html', context)
+
 
 def refferalPage(request):
     from googleplaces import GooglePlaces, types, lang
@@ -81,18 +127,17 @@ def refferalPage(request):
     # print("Latitude = ", getLoc.latitude, "\n")
     # print("Longitude = ", getLoc.longitude)
 
-    API_KEY = ('AIzaSyB3ZbQXl3kDtdlyFbhvJarw2-mXoFbh-2o')  #Google Maps API Key
+    API_KEY = ('AIzaSyB3ZbQXl3kDtdlyFbhvJarw2-mXoFbh-2o')  # Google Maps API Key
     google_places = GooglePlaces(API_KEY)
     data = request.POST
     # Get the variables by their keys
     lat = data.get('data')
     lon = data.get('data2')
 
-
-    #lat_lng = {'lat': 53.402040, 'lng': -6.407640}  # Replace with your latitude and longitude
+    # lat_lng = {'lat': 53.402040, 'lng': -6.407640}  # Replace with your latitude and longitude
     lat_lng = {'lat': getLoc.latitude, 'lng': getLoc.longitude}  # Replace with your latitude and longitude
-    #numbers are none FIX THISSSSSSSSSSSS
-    #lat_lng = {'lat': data_received, 'lng': data_received2}
+    # numbers are none FIX THISSSSSSSSSSSS
+    # lat_lng = {'lat': data_received, 'lng': data_received2}
     radius = 50000  # Radius in meters
 
     # Perform the nearby search for hospitals
