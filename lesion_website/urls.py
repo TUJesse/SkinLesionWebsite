@@ -8,5 +8,6 @@ urlpatterns = [
     path('referral/', views.refferalPage, name="referral"),
     path('home/', views.homePage, name="homePage"),
     path('login/', views.loginPage, name="loginPage"),
-    path('register/', views.registerPage, name="registerPage")
+    path('register/', views.registerPage, name="registerPage"),
+    path('logout/', views.logoutUser, name="logoutPage")
 ]

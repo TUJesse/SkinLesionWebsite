@@ -108,6 +108,10 @@ def registerPage(request):
     return render(request, 'register.html', context)
 
 
+def logoutUser(request):
+    logout(request)
+    return redirect('loginPage')
+
 def refferalPage(request):
     from googleplaces import GooglePlaces, types, lang
     from django.http import JsonResponse

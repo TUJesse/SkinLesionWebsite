@@ -34,6 +34,7 @@ body {font-family: "Lato", sans-serif}
         <a href="#" class="w3-bar-item w3-button">Media</a>
       </div>
     </div>
+      <a href="{% url 'logoutPage' %}" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Logout {{ request.user }}</a>
     <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a>
   </div>
 </div>
@@ -86,7 +87,8 @@ body {font-family: "Lato", sans-serif}
       </div>
       <div class="w3-third">
         <p>Trained from scratch</p>
-        <img src="../static/images/home_page/fromScratch.jpg" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+          <a href="{% url 'loadModel' %}"></a>
+          <a href="{% url 'loadModel' %}"><img src="../static/images/home_page/fromScratch.jpg" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%"> </a>
       </div>
       <div class="w3-third">
         <p>CNN-SVM</p>
