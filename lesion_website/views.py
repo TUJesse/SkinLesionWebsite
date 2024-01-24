@@ -26,9 +26,12 @@ from keras.models import load_model
 from .forms import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+
+@login_required(login_url='loginPage')
 def uploadPage(request):
     new_model = load_model(
         os.path.join('C:\\Users\jesse\OneDrive\Desktop\Year 4\Project\models', 'model50epochs500resample64size.keras'))
@@ -58,12 +61,14 @@ def uploadPage(request):
         return HttpResponse(template2.render(context2, request))
 
 
+@login_required(login_url='loginPage')
 def resultsPage(request, predicted_label):
     context = {'predicted_label': predicted_label}
 
     return render(request, 'lesion_upload.html', context)
 
 
+@login_required(login_url='loginPage')
 def homePage(request):
     template = loader.get_template('homePage.html')
     context = {'form': ImageForm()}
@@ -72,46 +77,50 @@ def homePage(request):
 
 
 def loginPage(request):
-    template = loader.get_template('login.html')
-    context = {}
+    if request.user.is_authenticated:
+        return redirect('homePage')
+    else:
+        context = {}
 
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            login(request, user)
-            return redirect('homePage')
-        else:
-            messages.info(request, 'Username or password is incorrect')
+            if user is not None:
+                login(request, user)
+                return redirect('homePage')
+            else:
+                messages.info(request, 'Username or password is incorrect')
 
-    return render(request, 'login.html', context)
+        return render(request, 'login.html', context)
 
 
 def registerPage(request):
-    template = loader.get_template('register.html')
+    if request.user.is_authenticated:
+        return redirect('homePage')
+    else:
+        form = CreateUserForm()
 
-    form = CreateUserForm()
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data.get('username')
+                messages.success(request, 'Account was created for ' + username)
+                return redirect('loginPage')
 
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, 'Account was created for ' + username)
-            return redirect('loginPage')
+        context = {'form': form}
 
-    context = {'form': form}
-
-    return render(request, 'register.html', context)
+        return render(request, 'register.html', context)
 
 
 def logoutUser(request):
     logout(request)
     return redirect('loginPage')
 
+@login_required(login_url='loginPage')
 def refferalPage(request):
     from googleplaces import GooglePlaces, types, lang
     from django.http import JsonResponse
