@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Upload</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            padding: 15px;
+            text-align: center;
+            color: #fff;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #444;
+            padding: 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+        }
+
+        nav a:hover {
+            border-bottom: 2px solid #fff;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        #preview-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        #upload-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #46a049;
+        }
+
+        .image-upload-form {
+              text-align: center;
+              max-width: 400px;
+              margin: 20px;
+              background-color: #fff;
+              padding: 20px;
+              border-radius: 8px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+          display: inline-block;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: bold;
+          color: #555;
+          border: 2px solid #ccc;
+          border-radius: 5px;
+          padding: 10px 20px;
+          margin-bottom: 20px;
+}
+    </style>
+
+</head>
+<body>
+
+<header>
+        <h1>Skin Lesion Classification</h1>
+    </header>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <main>
+        <h2>Transfer-learning Densenet</h2>
+        <p>This is a simple home page with a navigation bar and three menu options.</p>
+
+        <!-- Image Upload Section -->
+            <form method="post" class="image-upload-form" enctype="multipart/form-data">
+                <h2>Image Upload Form</h2>
+
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit">Upload</button>
+            </form>
+    </main>
+</body>
+</html>

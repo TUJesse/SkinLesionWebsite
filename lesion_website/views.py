@@ -27,9 +27,58 @@ from .forms import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+import requests
 
 
 # Create your views here.
+
+
+@login_required(login_url='loginPage')
+def CNN_SVM_UploadPage(request):
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            img = request.FILES['image']
+            files = {'file': img}
+
+            #data = {'text': 'your_text_value'}
+
+            api_url = 'http://127.0.0.1:5000/cnnsvm'
+            response = requests.post(api_url, files=files)
+            predicted_label = response.json()
+            return redirect('uploadImage', predicted_label=predicted_label)
+
+    elif request.method == 'GET':
+        template2 = loader.get_template('CNNSVMImgUpload.html')
+        context2 = {'form': ImageForm()}
+
+        return HttpResponse(template2.render(context2, request))
+
+
+@login_required(login_url='loginPage')
+def preTrainedUploadPage(request):
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            img = request.FILES['image']
+            files = {'file': img}
+
+            #data = {'text': 'your_text_value'}
+
+            api_url = 'http://127.0.0.1:5000/prediction'
+            response = requests.post(api_url, files=files)
+            predicted_label = response.json()
+            return redirect('uploadImage', predicted_label=predicted_label)
+
+    elif request.method == 'GET':
+        template2 = loader.get_template('preTrainedImgUpload.html')
+        context2 = {'form': ImageForm()}
+
+        return HttpResponse(template2.render(context2, request))
+
+
 
 @login_required(login_url='loginPage')
 def uploadPage(request):
@@ -164,7 +213,7 @@ def refferalPage(request):
 
         s = ""
         if place.international_phone_number is not None:
-            s = s + place.name + '\n' + place.international_phone_number + '\n' + place.url
+            s = s + place.name + '\n' + place.international_phone_number + '\n' + place.details
             lines = s.split('\n')
             hospitalList.append(lines)
 
@@ -173,3 +222,7 @@ def refferalPage(request):
 
     # return HttpResponse(template.render(None,request))
     return render(request, 'refferal.html', context)
+
+def loadModelUp():
+    model = keras.saving.load_model(os.path.join('C:\\Users\jesse\OneDrive\Desktop\Year 4\Project\models', 'Densenetmodel50epochs1500resample224size.keras'))
+    return model
