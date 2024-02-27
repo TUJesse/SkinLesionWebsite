@@ -23,15 +23,15 @@ body {font-family: "Lato", sans-serif}
   <div class="w3-bar w3-black w3-card">
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
     <a href="#" class="w3-bar-item w3-button w3-padding-large">HOME</a>
-    <a href="#band" class="w3-bar-item w3-button w3-padding-large w3-hide-small">MODEL</a>
-    <a href="#tour" class="w3-bar-item w3-button w3-padding-large w3-hide-small">BOOKS</a>
+    <a href="#model" class="w3-bar-item w3-button w3-padding-large w3-hide-small">MODEL</a>
+    <a href="#books" class="w3-bar-item w3-button w3-padding-large w3-hide-small">BOOKS</a>
     <a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">CONTACT</a>
     <div class="w3-dropdown-hover w3-hide-small">
       <button class="w3-padding-large w3-button" title="More">MORE <i class="fa fa-caret-down"></i></button>
       <div class="w3-dropdown-content w3-bar-block w3-card-4">
-        <a href="#" class="w3-bar-item w3-button">Merchandise</a>
-        <a href="#" class="w3-bar-item w3-button">Extras</a>
-        <a href="#" class="w3-bar-item w3-button">Media</a>
+        <a href="{% url 'referral' %}" class="w3-bar-item w3-button">REFERRAL</a>
+{#        <a href="#" class="w3-bar-item w3-button">Extras</a>#}
+{#        <a href="#" class="w3-bar-item w3-button">Media</a>#}
       </div>
     </div>
       <a href="{% url 'logoutPage' %}" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Logout {{ request.user }}</a>
@@ -41,8 +41,8 @@ body {font-family: "Lato", sans-serif}
 
 <!-- Navbar on small screens (remove the onclick attribute if you want the navbar to always show on top of the content when clicking on the links) -->
 <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
-  <a href="#band" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">BAND</a>
-  <a href="#tour" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">TOUR</a>
+  <a href="#model" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">model</a>
+  <a href="#books" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">books</a>
   <a href="#contact" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">CONTACT</a>
   <a href="#" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">MERCH</a>
 </div>
@@ -82,23 +82,23 @@ body {font-family: "Lato", sans-serif}
       adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     <div class="w3-row w3-padding-32">
       <div class="w3-third">
-        <p>ResNet-18 (pre-trained)</p>
-        <img src="../static/images/home_page/resNet.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+        <p>Densenet-201 (pre-trained)</p>
+          <a href="{% url 'densenetModel' %}"><img src="../static/images/home_page/denseNet.jpg" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%"></a>
       </div>
       <div class="w3-third">
         <p>Trained from scratch</p>
-          <a href="{% url 'loadModel' %}"></a>
+{#          <a href="{% url 'loadModel' %}"></a>#}
           <a href="{% url 'loadModel' %}"><img src="../static/images/home_page/fromScratch.jpg" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%"> </a>
       </div>
       <div class="w3-third">
         <p>CNN-SVM</p>
-        <img src="../static/images/home_page/svm.jpg" class="w3-round" alt="Random Name" style="width:60%">
+          <a href="{% url 'cnnSvmModel' %}"><img src="../static/images/home_page/svm.jpg" class="w3-round" alt="Random Name" style="width:60%"></a>
       </div>
     </div>
   </div>
 
   <!-- The Book Section -->
-  <div class="w3-black" id="tour">
+  <div class="w3-black" id="books">
     <div class="w3-container w3-content w3-padding-64" style="max-width:800px">
       <h2 class="w3-wide w3-center">Medical Books</h2>
       <p class="w3-opacity w3-center"><i>Pick up some books to better educate yourself on skin cancer!</i></p><br>
