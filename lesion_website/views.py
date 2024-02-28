@@ -200,12 +200,14 @@ def refferalPage(request):
     lat_lng = {'lat': getLoc.latitude, 'lng': getLoc.longitude}  # Replace with your latitude and longitude
     # numbers are none FIX THISSSSSSSSSSSS
     # lat_lng = {'lat': data_received, 'lng': data_received2}
-    radius = 50000  # Radius in meters
+    radius = 5000  # Radius in meters
 
     # Perform the nearby search for hospitals
     query_result = google_places.nearby_search(lat_lng=lat_lng, radius=radius, types=[types.TYPE_HOSPITAL])
 
     hospitalList = []
+    urlList = []
+    zipped_list = []
 
     # Print the results
     for place in query_result.places:
@@ -213,15 +215,40 @@ def refferalPage(request):
 
         s = ""
         if place.international_phone_number is not None:
-            s = s + place.name + '\n' + place.international_phone_number + '\n' + place.details
+            s = s + str(place.name) + '\n' + str(place.international_phone_number)
             lines = s.split('\n')
             hospitalList.append(lines)
+            urlList.append(str(place.url))
 
+        zipped_list = zip(hospitalList, urlList)
         # Create a dictionary with the hospitalList as the value
-    context = {'hospitalList': hospitalList}
+    context = {'zipped_list': zipped_list}
 
     # return HttpResponse(template.render(None,request))
     return render(request, 'refferal.html', context)
+
+
+@login_required(login_url='loginPage')
+def locationPage(request):
+    context = {}
+    template = loader.get_template('getLocation.html')
+    my_data = request.POST.get('myData')
+
+    # if request.method == 'POST':
+    #     my_data = request.POST.get('myData')
+    #     print(f"Received data: {my_data}")
+    # else:
+    #     my_data = None
+
+    if my_data is not None:
+        my_data = request.POST.get('myData')
+
+        context = {'my_data': my_data}
+        print(f"Received data: {my_data}")
+        return render(request, 'getLocation.html', context)
+    else:
+        return render(request, 'getLocation.html', context)
+
 
 def loadModelUp():
     model = keras.saving.load_model(os.path.join('C:\\Users\jesse\OneDrive\Desktop\Year 4\Project\models', 'Densenetmodel50epochs1500resample224size.keras'))

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+
+<button onclick="myMap()">Get coordinates</button>
+
+
+<button id = "submitButton">Save coordinates</button>
+
+<div id="coordinates"></div>
+<div id="sentCoordinates">{{ my_data }}</div>
+
+
+<script>
+
+    const x = document.getElementById("coordinates")
+   var lat;
+   var lon;
+   var map;
+   let service;
+   var myLatlng;
+   var lat_lng;
+   let infowindow;
+
+    function myMap() {
+
+        if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition)
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+
+    }
+
+    function showPosition(position) {
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+
+        x.innerHTML = "Lat: " + lat + " lon: " + lon;
+    }
+
+    document.getElementById("submitButton").addEventListener("click", function() {
+  var xhr = new XMLHttpRequest();
+  var dataText = document.getElementById("coordinates").innerText;
+  xhr.open("POST", "http://127.0.0.1:8000/location/");
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // Include your CSRF token here
+
+ if (lat == null){
+     xhr.send(encodeURIComponent(dataText));
+ }
+
+  xhr.send("myData=" + encodeURIComponent(dataText));
+ });
+
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+}
+
+{#$("#submitButton").click(function() {#}
+{#  // Get the content of the div with id "data"#}
+{#  var inputData = $("#coordinates").text();#}
+{##}
+{#  // Make an AJAX POST request#}
+{#  $.ajax({#}
+{#    type: "POST",#}
+{#    url: "http://127.0.0.1:8000/location/",#}
+{#    data: { myInput: inputData },#}
+{#      headers: {#}
+{#      "X-CSRFToken": csrftoken#}
+{#    },#}
+{#    success: function(response) {#}
+{#      // Update the content of the div with the response#}
+{#      $("#sentCoordinates").text("response");#}
+{#    },#}
+{#    error: function(error) {#}
+{#      console.error("Error:", error);#}
+{#    }#}
+{#  });#}
+{# });#}
+
+
+</script>
+</body>
+</html>

@@ -1,5 +1,20 @@
 <!DOCTYPE html>
 <html>
+
+<style>
+    #hospitals {
+          display: inline-block;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: bold;
+          color: #555;
+          border: 2px solid #ccc;
+          border-radius: 5px;
+          padding: 10px 20px;
+          margin-bottom: 20px;
+}
+</style>
+
 <body onload="myMap()">
 <h1>Referral System based on location</h1>
 <p>Click the button to get your coordinates.</p>
@@ -14,8 +29,8 @@
 <p id="demo"></p>
 
 <div id="list">
-{% for hospital in hospitalList %}
-    <div style="border-style: outset">{{ hospital }}</div>
+{% for hospital, url in zipped_list %}
+    <a href="{{ url }}"><div id="hospitals" style="border-style: outset">{{ hospital }}</div></a>
 {% endfor %}
 </div>
 

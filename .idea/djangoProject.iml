@@ -20,6 +20,7 @@
     <orderEntry type="library" name="font-awesome" level="application" />
     <orderEntry type="library" name="w3" level="application" />
     <orderEntry type="library" name="jquery" level="application" />
+    <orderEntry type="library" name="jquery-3.6.4" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
