@@ -26,6 +26,7 @@
    var myLatlng;
    var lat_lng;
    let infowindow;
+   var data;
 
     function myMap() {
 
@@ -41,22 +42,51 @@
         lat = position.coords.latitude;
         lon = position.coords.longitude;
 
-        x.innerHTML = "Lat: " + lat + " lon: " + lon;
-    }
+        data = {
+            lat: lat,
+            lon: lon
+        };
 
-    document.getElementById("submitButton").addEventListener("click", function() {
-  var xhr = new XMLHttpRequest();
-  var dataText = document.getElementById("coordinates").innerText;
+        //x.innerHTML = "Lat: " + lat + " lon: " + lon;
+        //data = {lat: lat, lon: lon}
+
+        var xhr = new XMLHttpRequest();
+  //var dataText = document.getElementById("coordinates").innerText;
+  var dataText = {lat, lon};
   xhr.open("POST", "http://127.0.0.1:8000/location/");
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // Include your CSRF token here
 
- if (lat == null){
-     xhr.send(encodeURIComponent(dataText));
- }
+ {#if (lat == null){#}
+ {#    xhr.send(encodeURIComponent(dataText));#}
+ {# }#}
 
-  xhr.send("myData=" + encodeURIComponent(dataText));
- });
+        xhr.onload = function () {
+        // This code will execute after the POST request is completed
+        // If you want to redirect, do it here
+        window.location.href = 'http://127.0.0.1:8000/referral';
+    };
+
+ //xhr.send("myData=" + encodeURIComponent(data));
+ xhr.send(JSON.stringify(data))
+
+    }
+
+ {#   document.getElementById("submitButton").addEventListener("click", function() {#}
+ {# var xhr = new XMLHttpRequest();#}
+ {# //var dataText = document.getElementById("coordinates").innerText;#}
+ {# var dataText = {lat, lon};#}
+ {# xhr.open("POST", "http://127.0.0.1:8000/location/");#}
+ {# xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");#}
+ {# xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // Include your CSRF token here#}
+ {##}
+ {#if (lat == null){#}
+ {#    xhr.send(encodeURIComponent(dataText));#}
+ {# }#}
+ {##}
+ {#xhr.send("myData=" + encodeURIComponent(data));#}
+ {#xhr.send(JSON.stringify(data))#}
+ {# });#}
 
     function getCookie(name) {
       var cookieValue = null;

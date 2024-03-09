@@ -1,3 +1,5 @@
+import json
+
 from django.forms import forms
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -31,6 +33,18 @@ import requests
 
 
 # Create your views here.
+
+Latitude = None
+Longitude = None
+gotPost = False
+
+
+def setLatLon(lat, lon):
+    global Latitude
+    global Longitude
+
+    Latitude = lat
+    Longitude = lon
 
 
 @login_required(login_url='loginPage')
@@ -82,25 +96,18 @@ def preTrainedUploadPage(request):
 
 @login_required(login_url='loginPage')
 def uploadPage(request):
-    new_model = load_model(
-        os.path.join('C:\\Users\jesse\OneDrive\Desktop\Year 4\Project\models', 'model50epochs500resample64size.keras'))
-    SIZE = 64
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
+
         if form.is_valid():
             img = request.FILES['image']
+            files = {'file': img}
 
-            image = Image.open(img)
+            # data = {'text': 'your_text_value'}
 
-            image = tf.image.resize(image, (SIZE, SIZE))
-            image = np.expand_dims(image / 255, axis=0)
-            prediction = new_model.predict(image)
-
-            class_labels = ['Class 0 (akiec)', 'Class 1 (bcc)', 'Class 2 (bkl)', 'Class 3 (df)', 'Class 4 (mel)',
-                            'Class 5 (nv)', 'Class 6 (vasc)']
-
-            predicted_label = " " + class_labels[prediction.argmax()]
-
+            api_url = 'http://127.0.0.1:5000/pretrained'
+            response = requests.post(api_url, files=files)
+            predicted_label = response.json()
             return redirect('uploadImage', predicted_label=predicted_label)
 
     elif request.method == 'GET':
@@ -171,6 +178,10 @@ def logoutUser(request):
 
 @login_required(login_url='loginPage')
 def refferalPage(request):
+
+    # if Latitude is None:
+    #     return redirect('locationPage')
+
     from googleplaces import GooglePlaces, types, lang
     from django.http import JsonResponse
     import json
@@ -180,7 +191,7 @@ def refferalPage(request):
     loc = Nominatim(user_agent="GetLoc")
 
     # entering the location name
-    getLoc = loc.geocode(" 28 Main Street Portlaoise")
+    #getLoc = loc.geocode(" 28 Main Street Portlaoise")
 
     # printing address
     # print(getLoc.address)
@@ -197,7 +208,7 @@ def refferalPage(request):
     lon = data.get('data2')
 
     # lat_lng = {'lat': 53.402040, 'lng': -6.407640}  # Replace with your latitude and longitude
-    lat_lng = {'lat': getLoc.latitude, 'lng': getLoc.longitude}  # Replace with your latitude and longitude
+    lat_lng = {'lat': Latitude, 'lng': Longitude}  # Replace with your latitude and longitude
     # numbers are none FIX THISSSSSSSSSSSS
     # lat_lng = {'lat': data_received, 'lng': data_received2}
     radius = 5000  # Radius in meters
@@ -230,24 +241,25 @@ def refferalPage(request):
 
 @login_required(login_url='loginPage')
 def locationPage(request):
-    context = {}
-    template = loader.get_template('getLocation.html')
-    my_data = request.POST.get('myData')
+    # context = {}
+    # template = loader.get_template('getLocation.html')
+    #gotPost = False
+    #global gotPost
 
-    # if request.method == 'POST':
-    #     my_data = request.POST.get('myData')
-    #     print(f"Received data: {my_data}")
-    # else:
-    #     my_data = None
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
 
-    if my_data is not None:
-        my_data = request.POST.get('myData')
+        setLatLon(float(data.get('lat')), float(data.get('lon')))
+        #gotPost = True
 
-        context = {'my_data': my_data}
-        print(f"Received data: {my_data}")
-        return render(request, 'getLocation.html', context)
+        print(f"Received data: {Latitude , Longitude}")
+        #return redirect('referral')
     else:
-        return render(request, 'getLocation.html', context)
+        return render(request, 'getLocation.html')
+        #return redirect('referral')
+
+    # if gotPost:
+    #     return redirect('referral')
 
 
 def loadModelUp():
