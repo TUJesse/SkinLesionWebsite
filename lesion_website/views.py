@@ -179,8 +179,9 @@ def logoutUser(request):
 @login_required(login_url='loginPage')
 def refferalPage(request):
 
-    # if Latitude is None:
-    #     return redirect('locationPage')
+    global Latitude
+    if Latitude is None:
+        return redirect('locationPage')
 
     from googleplaces import GooglePlaces, types, lang
     from django.http import JsonResponse

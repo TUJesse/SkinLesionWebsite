@@ -133,17 +133,7 @@
 {#    <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>#}
     <a href="{% url 'homePage' %}" class="w3-bar-item w3-button w3-padding-large">HOME</a>
     <a href="{% url 'referral' %}" class="w3-bar-item w3-button w3-padding-large w3-hide-small">REFERRAL</a>
-    <a href="#books" class="w3-bar-item w3-button w3-padding-large w3-hide-small">BOOKS</a>
-    <a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">CONTACT</a>
-    <div class="w3-dropdown-hover w3-hide-small">
-      <button class="w3-padding-large w3-button" title="More">MORE <i class="fa fa-caret-down"></i></button>
-      <div class="w3-dropdown-content w3-bar-block w3-card-4">
-        <a href="#" class="w3-bar-item w3-button">Merchandise</a>
-        <a href="#" class="w3-bar-item w3-button">Extras</a>
-        <a href="#" class="w3-bar-item w3-button">Media</a>
-      </div>
-    </div>
-      <a href="{% url 'logoutPage' %}" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Logout {{ request.user }}</a>
+      <a href="{% url 'logoutPage' %}" class="w3-bar-item w3-button w3-padding-large w3-hide-small">LOGOUT {{ request.user }}</a>
     <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a>
   </div>
     </nav>
@@ -151,15 +141,14 @@
 
 <!-- Navbar on small screens (remove the onclick attribute if you want the navbar to always show on top of the content when clicking on the links) -->
 <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
-  <a href="#model" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">model</a>
-  <a href="#books" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">books</a>
-  <a href="#contact" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">CONTACT</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">MERCH</a>
+  <a href="{% url 'homePage' %}" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">HOME</a>
+  <a href="{% url 'referral' %}" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">REFERRAL</a>
+  <a href="{% url 'logoutPage' %}" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">LOGOUT {{ request.user }}</a>
 </div>
 
     <main>
-        <h2>CNN-SVM algorithm</h2>
-        <p>This is a simple home page with a navigation bar and three menu options.</p>
+        <h2>Add A New Skin Lesion For CNN-SVM Classifier</h2>
+        <p>Be patient as with few resources it might take considerable time to classify</p>
 
         <!-- Image Upload Section -->
             <form method="post" class="image-upload-form" enctype="multipart/form-data">
