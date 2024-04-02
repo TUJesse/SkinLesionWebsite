@@ -4,10 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Success</title>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
+
+<!-- Navbar -->
+{#<div class="w3-top">#}
+<nav>
+  <div class="w3-bar w3-black w3-card">
+{#    <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>#}
+    <a href="{% url 'homePage' %}" class="w3-bar-item w3-button w3-padding-large">HOME</a>
+    <a href="{% url 'referral' %}" class="w3-bar-item w3-button w3-padding-large w3-hide-small">REFERRAL</a>
+      <a href="{% url 'logoutPage' %}" class="w3-bar-item w3-button w3-padding-large w3-hide-small">LOGOUT {{ request.user }}</a>
+    <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a>
+  </div>
+    </nav>
+{#</div>#}
+
+<!-- Navbar on small screens (remove the onclick attribute if you want the navbar to always show on top of the content when clicking on the links) -->
+<div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+  <a href="{% url 'homePage' %}" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">HOME</a>
+  <a href="{% url 'referral' %}" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">REFERRAL</a>
+  <a href="{% url 'logoutPage' %}" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">LOGOUT {{ request.user }}</a>
+</div>
+
     <h2>Upload Successful</h2>
     <p>{{ predicted_label }}</p>
+    {{ chart|safe }}
     <p>For a professional look at your lesion, please check a dermatologist near you with our <a href="{% url 'referral' %}" class="w3-bar-item w3-button">referral</a> page.</p>
     <!-- Display additional information or the uploaded file as needed -->
 </body>

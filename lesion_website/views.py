@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 import matplotlib.pyplot as plt
+import plotly.express as px
 import numpy as np
 import pandas as pd
 import os
@@ -37,7 +38,7 @@ import requests
 Latitude = None
 Longitude = None
 gotPost = False
-
+LesionImg = None
 
 def setLatLon(lat, lon):
     global Latitude
@@ -53,8 +54,10 @@ def CNN_SVM_UploadPage(request):
         form = ImageForm(request.POST, request.FILES)
 
         if form.is_valid():
+            global LesionImg
             img = request.FILES['image']
-            files = {'file': img}
+            LesionImg = img.read()
+            files = {'file': (img.name, LesionImg)}
 
             #data = {'text': 'your_text_value'}
 
@@ -76,8 +79,10 @@ def preTrainedUploadPage(request):
         form = ImageForm(request.POST, request.FILES)
 
         if form.is_valid():
+            global LesionImg
             img = request.FILES['image']
-            files = {'file': img}
+            LesionImg = img.read()
+            files = {'file': (img.name, LesionImg)}
 
             #data = {'text': 'your_text_value'}
 
@@ -100,14 +105,17 @@ def uploadPage(request):
         form = ImageForm(request.POST, request.FILES)
 
         if form.is_valid():
+            global LesionImg
             img = request.FILES['image']
-            files = {'file': img}
+            LesionImg = img.read()
+            files = {'file': (img.name, LesionImg)}
 
             # data = {'text': 'your_text_value'}
 
             api_url = 'http://127.0.0.1:5000/pretrained'
             response = requests.post(api_url, files=files)
             predicted_label = response.json()
+
             return redirect('uploadImage', predicted_label=predicted_label)
 
     elif request.method == 'GET':
@@ -119,7 +127,9 @@ def uploadPage(request):
 
 @login_required(login_url='loginPage')
 def resultsPage(request, predicted_label):
-    context = {'predicted_label': predicted_label}
+    global LesionImg
+    chart = plotImg(LesionImg)
+    context = {'predicted_label': predicted_label, 'chart': chart}
 
     return render(request, 'lesion_upload.html', context)
 
@@ -266,3 +276,31 @@ def locationPage(request):
 def loadModelUp():
     model = keras.saving.load_model(os.path.join('C:\\Users\jesse\OneDrive\Desktop\Year 4\Project\models', 'Densenetmodel50epochs1500resample224size.keras'))
     return model
+
+def plotImg(img):
+    import cv2
+    import matplotlib.pyplot as plt
+
+    #image_data = img.read()
+    image = np.frombuffer(img, np.uint8)
+
+    # load image
+    #imageObj = cv2.imread(img)
+    imageObj = cv2.imdecode(image, cv2.IMREAD_COLOR)
+    # Get RGB data from image
+    blue_color = cv2.calcHist([imageObj], [0], None, [256], [0, 256]).flatten()
+    red_color = cv2.calcHist([imageObj], [1], None, [256], [0, 256]).flatten()
+    green_color = cv2.calcHist([imageObj], [2], None, [256], [0, 256]).flatten()
+
+    # Create DataFrame
+    histogram_data = {
+        'Intensity': np.arange(256),
+        'Blue': blue_color,
+        'Green': green_color,
+        'Red': red_color
+    }
+    df = pd.DataFrame(histogram_data)
+
+    # Plot histogram using Plotly Express
+    fig = px.line(df, x='Intensity', y=['Blue', 'Green', 'Red'], title='Histogram of RGB Colors of the Lesion image')
+    return fig.to_html()
