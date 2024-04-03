@@ -13,8 +13,7 @@
 <body>
 
 <!-- Navbar -->
-{#<div class="w3-top">#}
-<nav>
+<div class="w3-top">
   <div class="w3-bar w3-black w3-card">
 {#    <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>#}
     <a href="{% url 'homePage' %}" class="w3-bar-item w3-button w3-padding-large">HOME</a>
@@ -22,8 +21,7 @@
       <a href="{% url 'logoutPage' %}" class="w3-bar-item w3-button w3-padding-large w3-hide-small">LOGOUT {{ request.user }}</a>
     <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a>
   </div>
-    </nav>
-{#</div>#}
+</div>
 
 <!-- Navbar on small screens (remove the onclick attribute if you want the navbar to always show on top of the content when clicking on the links) -->
 <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
@@ -32,10 +30,12 @@
   <a href="{% url 'logoutPage' %}" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">LOGOUT {{ request.user }}</a>
 </div>
 
+<div class="w3-content" style="max-width:2000px;margin-top:46px">
     <h2>Upload Successful</h2>
     <p>{{ predicted_label }}</p>
     {{ chart|safe }}
     <p>For a professional look at your lesion, please check a dermatologist near you with our <a href="{% url 'referral' %}" class="w3-bar-item w3-button">referral</a> page.</p>
     <!-- Display additional information or the uploaded file as needed -->
+</div>
 </body>
 </html>

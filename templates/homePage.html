@@ -44,7 +44,7 @@ body {font-family: "Lato", sans-serif}
   <a href="#model" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">model</a>
   <a href="#books" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">books</a>
   <a href="#contact" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">CONTACT</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">MERCH</a>
+  <a href="{% url 'referral' %}" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">REFERRAL</a>
 </div>
 
 <!-- Page content -->
@@ -77,16 +77,18 @@ body {font-family: "Lato", sans-serif}
   <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="model">
     <h2 class="w3-wide">Skin Lesion Classifier</h2>
     <p class="w3-opacity"><i>Model classification model selection</i></p>
-    <p class="w3-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-      ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur
-      adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <p class="w3-justify">Computer vision for skin cancer detection employs advanced algorithms and machine learning techniques to analyze images of
+        skin lesions and moles. By leveraging image processing, pattern recognition, and deep learning models,
+        this technology can identify potential signs of skin cancer, such as asymmetry, irregular borders, color variations,
+        and changes in size or shape. By accurately detecting these abnormalities, computer vision aids in early diagnosis,
+        allowing for timely medical intervention and improved patient outcomes.</p>
     <div class="w3-row w3-padding-32">
       <div class="w3-third">
-        <p>Densenet-201 (pre-trained)</p>
+        <p>Densenet-201</p>
           <a href="{% url 'densenetModel' %}"><img src="../static/images/home_page/denseNet.jpg" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%"></a>
       </div>
       <div class="w3-third">
-        <p>Trained from scratch</p>
+        <p>Sequential</p>
 {#          <a href="{% url 'loadModel' %}"></a>#}
           <a href="{% url 'loadModel' %}"><img src="../static/images/home_page/fromScratch.jpg" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%"> </a>
       </div>

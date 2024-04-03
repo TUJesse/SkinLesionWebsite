@@ -65,6 +65,11 @@ def CNN_SVM_UploadPage(request):
             response = requests.post(api_url, files=files)
             predicted_label = response.json()
             return redirect('uploadImage', predicted_label=predicted_label)
+        else:
+            template2 = loader.get_template('CNNSVMImgUpload.html')
+            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg)'}
+
+            return HttpResponse(template2.render(context2, request))
 
     elif request.method == 'GET':
         template2 = loader.get_template('CNNSVMImgUpload.html')
@@ -90,6 +95,11 @@ def preTrainedUploadPage(request):
             response = requests.post(api_url, files=files)
             predicted_label = response.json()
             return redirect('uploadImage', predicted_label=predicted_label)
+        else:
+            template2 = loader.get_template('preTrainedImgUpload.html')
+            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg)'}
+
+            return HttpResponse(template2.render(context2, request))
 
     elif request.method == 'GET':
         template2 = loader.get_template('preTrainedImgUpload.html')
@@ -117,6 +127,11 @@ def uploadPage(request):
             predicted_label = response.json()
 
             return redirect('uploadImage', predicted_label=predicted_label)
+        else:
+            template2 = loader.get_template('imgUpload.html')
+            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg)'}
+
+            return HttpResponse(template2.render(context2, request))
 
     elif request.method == 'GET':
         template2 = loader.get_template('imgUpload.html')
@@ -201,15 +216,6 @@ def refferalPage(request):
     # calling the Nominatim tool
     loc = Nominatim(user_agent="GetLoc")
 
-    # entering the location name
-    #getLoc = loc.geocode(" 28 Main Street Portlaoise")
-
-    # printing address
-    # print(getLoc.address)
-
-    # printing latitude and longitude
-    # print("Latitude = ", getLoc.latitude, "\n")
-    # print("Longitude = ", getLoc.longitude)
 
     API_KEY = ('AIzaSyB3ZbQXl3kDtdlyFbhvJarw2-mXoFbh-2o')  # Google Maps API Key
     google_places = GooglePlaces(API_KEY)

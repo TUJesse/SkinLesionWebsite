@@ -7,14 +7,14 @@ from django.contrib.auth.models import User
 
 
 def validate_image_extension(value):
-    valid_extensions = ['.jpg', '.jpeg']
+    valid_extensions = ['jpg', 'jpeg', 'webp']
     extension = str(value.name).lower().split('.')[-1]
     if extension not in valid_extensions:
         raise ValidationError("Unsupported file extension. Please upload a JPG file.")
 
 
 class ImageForm(forms.Form):
-    image = forms.ImageField(required=True)
+    image = forms.ImageField(required=True, validators=[validate_image_extension])
 
 class CreateUserForm(UserCreationForm):
     class Meta:

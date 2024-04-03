@@ -151,6 +151,7 @@
         <!-- Image Upload Section -->
             <form method="post" class="image-upload-form" enctype="multipart/form-data">
                 <h2>Image Upload Form</h2>
+                {{ errorMsg }}
 
                 {% csrf_token %}
                 {{ form }}
