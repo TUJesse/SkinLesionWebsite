@@ -1,0 +1,18 @@
+build:
+    docker build -force-rm $(options) -t skin-lesion-website:latest .
+
+compose-start:
+    docker-compose up --remove-orphans
+
+compose-manage-py:
+    docker-compose run --rm $(options) website python manage.py $(cmd)
+
+start-server:
+    python manage.py runserver 0.0.0.0:80
+
+push:
+    docker tag skin-lesion-website:latest jesseosuji/lesion-website:v0.0.1
+    docker push jesseosuji/lesion-website:v0.0.1
+
+helm-deploy:
+    helm upgrade --install lesion-website ./helm/lesion-website

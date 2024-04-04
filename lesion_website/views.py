@@ -1,37 +1,22 @@
 import json
+import os
 
-from django.forms import forms
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-import matplotlib.pyplot as plt
-import plotly.express as px
+import keras
 import numpy as np
 import pandas as pd
-import os
-from glob import glob
-import seaborn as sns
-from PIL import Image
-from django.template import loader
-from sklearn.metrics import confusion_matrix
-import keras
-import tensorflow as tf
-from keras.utils import to_categorical
-from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout
-from sklearn.model_selection import train_test_split
-from sklearn.utils import resample
-from scipy import stats
-from sklearn.preprocessing import LabelEncoder
-import cv2
-from keras.models import load_model
-# from .forms import ImageForm
-from .forms import *
+import plotly.express as px
+import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-import requests
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.template import loader
+from googleplaces import GooglePlaces, types
+from geopy.geocoders import Nominatim
 
+# from .forms import ImageForm
+from .forms import *
 
 # Create your views here.
 
@@ -48,7 +33,7 @@ def setLatLon(lat, lon):
     Longitude = lon
 
 
-@login_required(login_url='loginPage')
+#@login_required(login_url='loginPage')
 def CNN_SVM_UploadPage(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -61,7 +46,8 @@ def CNN_SVM_UploadPage(request):
 
             #data = {'text': 'your_text_value'}
 
-            api_url = 'http://127.0.0.1:5000/cnnsvm'
+            #api_url = 'http://127.0.0.1:5000/cnnsvm'
+            api_url = 'https://jesseosuji.pythonanywhere.com/cnnsvm'
             response = requests.post(api_url, files=files)
             predicted_label = response.json()
             return redirect('uploadImage', predicted_label=predicted_label)
@@ -78,7 +64,7 @@ def CNN_SVM_UploadPage(request):
         return HttpResponse(template2.render(context2, request))
 
 
-@login_required(login_url='loginPage')
+#@login_required(login_url='loginPage')
 def preTrainedUploadPage(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -109,7 +95,7 @@ def preTrainedUploadPage(request):
 
 
 
-@login_required(login_url='loginPage')
+#@login_required(login_url='loginPage')
 def uploadPage(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -122,9 +108,10 @@ def uploadPage(request):
 
             # data = {'text': 'your_text_value'}
 
-            api_url = 'http://127.0.0.1:5000/pretrained'
+            #api_url = 'http://127.0.0.1:5000/pretrained'
+            api_url = 'https://jesseosuji.pythonanywhere.com/sequential'
             response = requests.post(api_url, files=files)
-            predicted_label = response.json()
+            predicted_label = 'response is ' + str(response)
 
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
@@ -140,7 +127,7 @@ def uploadPage(request):
         return HttpResponse(template2.render(context2, request))
 
 
-@login_required(login_url='loginPage')
+#@login_required(login_url='loginPage')
 def resultsPage(request, predicted_label):
     global LesionImg
     chart = plotImg(LesionImg)
@@ -149,7 +136,7 @@ def resultsPage(request, predicted_label):
     return render(request, 'lesion_upload.html', context)
 
 
-@login_required(login_url='loginPage')
+#@login_required(login_url='loginPage')
 def homePage(request):
     template = loader.get_template('homePage.html')
     context = {'form': ImageForm()}
@@ -179,39 +166,34 @@ def loginPage(request):
 
 
 def registerPage(request):
-    if request.user.is_authenticated:
-        return redirect('homePage')
-    else:
-        form = CreateUserForm()
+    # if request.user.is_authenticated:
+    #     return redirect('homePage')
+    # else:
+    form = CreateUserForm()
 
-        if request.method == 'POST':
-            form = CreateUserForm(request.POST)
-            if form.is_valid():
-                form.save()
-                username = form.cleaned_data.get('username')
-                messages.success(request, 'Account was created for ' + username)
-                return redirect('loginPage')
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + username)
+            return redirect('loginPage')
 
-        context = {'form': form}
+    context = {'form': form}
 
-        return render(request, 'register.html', context)
+    return render(request, 'register.html', context)
 
 
 def logoutUser(request):
     logout(request)
     return redirect('loginPage')
 
-@login_required(login_url='loginPage')
+#@login_required(login_url='loginPage')
 def refferalPage(request):
 
     global Latitude
     if Latitude is None:
         return redirect('locationPage')
-
-    from googleplaces import GooglePlaces, types, lang
-    from django.http import JsonResponse
-    import json
-    from geopy.geocoders import Nominatim
 
     # calling the Nominatim tool
     loc = Nominatim(user_agent="GetLoc")
@@ -256,7 +238,7 @@ def refferalPage(request):
     return render(request, 'refferal.html', context)
 
 
-@login_required(login_url='loginPage')
+#@login_required(login_url='loginPage')
 def locationPage(request):
     # context = {}
     # template = loader.get_template('getLocation.html')
@@ -285,7 +267,6 @@ def loadModelUp():
 
 def plotImg(img):
     import cv2
-    import matplotlib.pyplot as plt
 
     #image_data = img.read()
     image = np.frombuffer(img, np.uint8)

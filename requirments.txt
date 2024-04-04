@@ -1,0 +1,9 @@
+matplotlib
+keras
+Django
+psycopg2
+plotly
+pandas
+tensorflow
+python-google-places
+geopy
