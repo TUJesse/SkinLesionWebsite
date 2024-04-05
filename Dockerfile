@@ -16,6 +16,7 @@ RUN apt-get update && \
     libpq-dev
 
 COPY requirments.txt ./
+COPY staticfiles ./
 RUN pip install -r ./requirments.txt
 
 COPY . .
