@@ -7,3 +7,4 @@ pandas
 tensorflow
 python-google-places
 geopy
+gunicorn
