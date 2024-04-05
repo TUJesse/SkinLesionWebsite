@@ -138,7 +138,7 @@ def resultsPage(request, predicted_label):
 
 #@login_required(login_url='loginPage')
 def homePage(request):
-    template = loader.get_template('homePage.html')
+    template = loader.get_template('index.html')
     context = {'form': ImageForm()}
 
     return HttpResponse(template.render(context, request))
