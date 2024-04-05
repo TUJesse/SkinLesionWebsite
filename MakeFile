@@ -16,3 +16,5 @@ push:
 
 helm-deploy:
     helm upgrade --install lesion-website ./helm/lesion-website
+
+ source djangoprojectenv/bin/activate
