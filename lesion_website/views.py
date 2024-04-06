@@ -8,12 +8,11 @@ import plotly.express as px
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import loader
-from googleplaces import GooglePlaces, types
 from geopy.geocoders import Nominatim
+from googleplaces import GooglePlaces, types
 
 # from .forms import ImageForm
 from .forms import *
@@ -47,8 +46,8 @@ def CNN_SVM_UploadPage(request):
             #data = {'text': 'your_text_value'}
 
             #api_url = 'http://127.0.0.1:5000/cnnsvm'
-            api_url = 'https://jesseosuji.pythonanywhere.com/cnnsvm'
-            response = requests.post(api_url, files=files)
+            api_url = 'https://lesion-api-2yllx.ondigitalocean.app/cnnsvm'
+            response = requests.post(api_url, files=files, timeout=120)
             predicted_label = response.json()
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
@@ -77,8 +76,9 @@ def preTrainedUploadPage(request):
 
             #data = {'text': 'your_text_value'}
 
-            api_url = 'http://127.0.0.1:5000/prediction'
-            response = requests.post(api_url, files=files)
+            api_url = 'https://lesion-api-2yllx.ondigitalocean.app/prediction'
+            #api_url = 'http://127.0.0.1:5000/prediction'
+            response = requests.post(api_url, files=files, timeout=120)
             predicted_label = response.json()
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
@@ -92,7 +92,6 @@ def preTrainedUploadPage(request):
         context2 = {'form': ImageForm()}
 
         return HttpResponse(template2.render(context2, request))
-
 
 
 #@login_required(login_url='loginPage')
@@ -109,9 +108,10 @@ def uploadPage(request):
             # data = {'text': 'your_text_value'}
 
             #api_url = 'http://127.0.0.1:5000/pretrained'
-            api_url = 'https://jesseosuji.pythonanywhere.com/sequential'
+            #api_url = 'https://lesion-apis.onrender.com/pretrained'
+            api_url = 'https://lesion-api-2yllx.ondigitalocean.app/pretrained'
             response = requests.post(api_url, files=files)
-            predicted_label = 'response is ' + str(response)
+            predicted_label = response.json()
 
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
