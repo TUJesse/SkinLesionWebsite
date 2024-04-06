@@ -1,10 +1,11 @@
+import io
 import json
 
-import cv2
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import requests
+from PIL import Image
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
@@ -261,26 +262,25 @@ def locationPage(request):
 
 
 def plotImg(img):
-    #image_data = img.read()
-    image = np.frombuffer(img, np.uint8)
+    # Decode image from buffer
+    #image = np.frombuffer(img, np.uint8)
+    image = Image.open(io.BytesIO(img))
+    image_np = np.array(image)
 
-    # load image
-    #imageObj = cv2.imread(img)
-    imageObj = cv2.imdecode(image, cv2.IMREAD_COLOR)
     # Get RGB data from image
-    blue_color = cv2.calcHist([imageObj], [0], None, [256], [0, 256]).flatten()
-    red_color = cv2.calcHist([imageObj], [1], None, [256], [0, 256]).flatten()
-    green_color = cv2.calcHist([imageObj], [2], None, [256], [0, 256]).flatten()
+    red_color = np.histogram(image_np[:,:,0], bins=256, range=[0,256])[0]
+    green_color = np.histogram(image_np[:,:,1], bins=256, range=[0,256])[0]
+    blue_color = np.histogram(image_np[:,:,2], bins=256, range=[0,256])[0]
 
     # Create DataFrame
     histogram_data = {
         'Intensity': np.arange(256),
-        'Blue': blue_color,
+        'Red': red_color,
         'Green': green_color,
-        'Red': red_color
+        'Blue': blue_color
     }
     df = pd.DataFrame(histogram_data)
 
     # Plot histogram using Plotly Express
-    fig = px.line(df, x='Intensity', y=['Blue', 'Green', 'Red'], title='Histogram of RGB Colors of the Lesion image')
+    fig = px.line(df, x='Intensity', y=['Red', 'Green', 'Blue'], title='Histogram of RGB Colors of the Lesion image')
     return fig.to_html()
