@@ -1,0 +1,10 @@
+matplotlib
+Django==4.2.7
+plotly~=5.20.0
+pandas~=2.0.3
+python-google-places~=1.4.2
+geopy~=2.4.1
+gunicorn
+opencv-python
+numpy~=1.26.4
+requests~=2.31.0

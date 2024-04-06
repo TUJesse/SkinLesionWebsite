@@ -1,7 +1,6 @@
 import json
-import os
 
-import keras
+import cv2
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -261,13 +260,7 @@ def locationPage(request):
     #     return redirect('referral')
 
 
-def loadModelUp():
-    model = keras.saving.load_model(os.path.join('C:\\Users\jesse\OneDrive\Desktop\Year 4\Project\models', 'Densenetmodel50epochs1500resample224size.keras'))
-    return model
-
 def plotImg(img):
-    import cv2
-
     #image_data = img.read()
     image = np.frombuffer(img, np.uint8)
 
