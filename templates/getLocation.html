@@ -70,7 +70,7 @@
         var xhr = new XMLHttpRequest();
   //var dataText = document.getElementById("coordinates").innerText;
   var dataText = {lat, lon};
-  xhr.open("POST", "http://127.0.0.1:8000/location/");
+  xhr.open("POST", "https://skin-lesion-classifier-gzb22.ondigitalocean.app/location/");
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // Include your CSRF token here
 
@@ -81,29 +81,13 @@
         xhr.onload = function () {
         // This code will execute after the POST request is completed
         // If you want to redirect, do it here
-        window.location.href = 'http://127.0.0.1:8000/referral';
+        window.location.href = 'https://skin-lesion-classifier-gzb22.ondigitalocean.app/referral';
     };
 
  //xhr.send("myData=" + encodeURIComponent(data));
  xhr.send(JSON.stringify(data))
 
     }
-
- {#   document.getElementById("submitButton").addEventListener("click", function() {#}
- {# var xhr = new XMLHttpRequest();#}
- {# //var dataText = document.getElementById("coordinates").innerText;#}
- {# var dataText = {lat, lon};#}
- {# xhr.open("POST", "http://127.0.0.1:8000/location/");#}
- {# xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");#}
- {# xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // Include your CSRF token here#}
- {##}
- {#if (lat == null){#}
- {#    xhr.send(encodeURIComponent(dataText));#}
- {# }#}
- {##}
- {#xhr.send("myData=" + encodeURIComponent(data));#}
- {#xhr.send(JSON.stringify(data))#}
- {# });#}
 
     function getCookie(name) {
       var cookieValue = null;
@@ -119,28 +103,6 @@
       }
       return cookieValue;
 }
-
-{#$("#submitButton").click(function() {#}
-{#  // Get the content of the div with id "data"#}
-{#  var inputData = $("#coordinates").text();#}
-{##}
-{#  // Make an AJAX POST request#}
-{#  $.ajax({#}
-{#    type: "POST",#}
-{#    url: "http://127.0.0.1:8000/location/",#}
-{#    data: { myInput: inputData },#}
-{#      headers: {#}
-{#      "X-CSRFToken": csrftoken#}
-{#    },#}
-{#    success: function(response) {#}
-{#      // Update the content of the div with the response#}
-{#      $("#sentCoordinates").text("response");#}
-{#    },#}
-{#    error: function(error) {#}
-{#      console.error("Error:", error);#}
-{#    }#}
-{#  });#}
-{# });#}
 
 
 </script>
