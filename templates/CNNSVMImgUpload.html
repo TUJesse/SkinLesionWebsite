@@ -154,7 +154,7 @@
             <form method="post" class="image-upload-form" enctype="multipart/form-data">
                 <h2>Image Upload Form</h2>
                 {{ errorMsg }}
-
+                <br>
                 {% csrf_token %}
                 {{ form }}
                 <button type="submit">Predict</button>

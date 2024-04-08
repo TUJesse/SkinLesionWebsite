@@ -52,7 +52,7 @@ def CNN_SVM_UploadPage(request):
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
             template2 = loader.get_template('CNNSVMImgUpload.html')
-            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg)'}
+            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg) and image must be less than 100KB'}
 
             return HttpResponse(template2.render(context2, request))
 
@@ -83,7 +83,7 @@ def preTrainedUploadPage(request):
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
             template2 = loader.get_template('preTrainedImgUpload.html')
-            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg)'}
+            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg) and image must be less than 100KB'}
 
             return HttpResponse(template2.render(context2, request))
 
@@ -116,7 +116,7 @@ def uploadPage(request):
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
             template2 = loader.get_template('imgUpload.html')
-            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg)'}
+            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg) and image must be less than 100KB'}
 
             return HttpResponse(template2.render(context2, request))
 

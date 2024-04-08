@@ -12,9 +12,13 @@ def validate_image_extension(value):
     if extension not in valid_extensions:
         raise ValidationError("Unsupported file extension. Please upload a JPG file.")
 
+def validate_image_size(value):
+    max_size = 100 * 1024
+    if value.size > max_size:
+        raise ValidationError("File size exceeds the maximum allowed limit of 100 MB.")
 
 class ImageForm(forms.Form):
-    image = forms.ImageField(required=True, validators=[validate_image_extension])
+    image = forms.ImageField(required=True, validators=[validate_image_extension, validate_image_size])
 
 class CreateUserForm(UserCreationForm):
     class Meta:
