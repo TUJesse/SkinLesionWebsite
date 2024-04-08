@@ -47,7 +47,7 @@ def CNN_SVM_UploadPage(request):
 
             #api_url = 'http://127.0.0.1:5000/cnnsvm'
             api_url = 'https://lesion-api-2yllx.ondigitalocean.app/cnnsvm'
-            response = requests.post(api_url, files=files, timeout=140)
+            response = requests.post(api_url, files=files, timeout=160)
             predicted_label = response.json()
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
