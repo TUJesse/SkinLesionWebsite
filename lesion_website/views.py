@@ -197,8 +197,8 @@ def logoutUser(request):
 def refferalPage(request):
 
     global Latitude
-    if Latitude is None:
-        return redirect('locationPage')
+    # if Latitude is None:
+    #     return redirect('locationPage')
 
     # calling the Nominatim tool
     loc = Nominatim(user_agent="GetLoc")
