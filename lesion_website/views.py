@@ -24,6 +24,7 @@ Longitude = None
 gotPost = False
 LesionImg = None
 
+
 def setLatLon(lat, lon):
     global Latitude
     global Longitude
@@ -32,7 +33,7 @@ def setLatLon(lat, lon):
     Longitude = lon
 
 
-#@login_required(login_url='loginPage')
+# @login_required(login_url='loginPage')
 def CNN_SVM_UploadPage(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -43,16 +44,17 @@ def CNN_SVM_UploadPage(request):
             LesionImg = img.read()
             files = {'file': (img.name, LesionImg)}
 
-            #data = {'text': 'your_text_value'}
+            # data = {'text': 'your_text_value'}
 
-            #api_url = 'http://127.0.0.1:5000/cnnsvm'
+            # api_url = 'http://127.0.0.1:5000/cnnsvm'
             api_url = 'https://lesion-api-2yllx.ondigitalocean.app/cnnsvm'
             response = requests.post(api_url, files=files, timeout=160)
             predicted_label = response.json()
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
             template2 = loader.get_template('CNNSVMImgUpload.html')
-            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg) and image must be less than 100KB'}
+            context2 = {'form': ImageForm(),
+                        'errorMsg': 'Please upload supported image file format (jpg, jpeg) and image must be less than 100KB'}
 
             return HttpResponse(template2.render(context2, request))
 
@@ -63,7 +65,7 @@ def CNN_SVM_UploadPage(request):
         return HttpResponse(template2.render(context2, request))
 
 
-#@login_required(login_url='loginPage')
+# @login_required(login_url='loginPage')
 def preTrainedUploadPage(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -74,16 +76,17 @@ def preTrainedUploadPage(request):
             LesionImg = img.read()
             files = {'file': (img.name, LesionImg)}
 
-            #data = {'text': 'your_text_value'}
+            # data = {'text': 'your_text_value'}
 
             api_url = 'https://lesion-api-2yllx.ondigitalocean.app/prediction'
-            #api_url = 'http://127.0.0.1:5000/prediction'
+            # api_url = 'http://127.0.0.1:5000/prediction'
             response = requests.post(api_url, files=files, timeout=120)
             predicted_label = response.json()
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
             template2 = loader.get_template('preTrainedImgUpload.html')
-            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg) and image must be less than 100KB'}
+            context2 = {'form': ImageForm(),
+                        'errorMsg': 'Please upload supported image file format (jpg, jpeg) and image must be less than 100KB'}
 
             return HttpResponse(template2.render(context2, request))
 
@@ -94,7 +97,7 @@ def preTrainedUploadPage(request):
         return HttpResponse(template2.render(context2, request))
 
 
-#@login_required(login_url='loginPage')
+# @login_required(login_url='loginPage')
 def uploadPage(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -107,8 +110,8 @@ def uploadPage(request):
 
             # data = {'text': 'your_text_value'}
 
-            #api_url = 'http://127.0.0.1:5000/pretrained'
-            #api_url = 'https://lesion-apis.onrender.com/pretrained'
+            # api_url = 'http://127.0.0.1:5000/pretrained'
+            # api_url = 'https://lesion-apis.onrender.com/pretrained'
             api_url = 'https://lesion-api-2yllx.ondigitalocean.app/pretrained'
             response = requests.post(api_url, files=files)
             predicted_label = response.json()
@@ -116,7 +119,8 @@ def uploadPage(request):
             return redirect('uploadImage', predicted_label=predicted_label)
         else:
             template2 = loader.get_template('imgUpload.html')
-            context2 = {'form': ImageForm(), 'errorMsg': 'Please upload supported image file format (jpg, jpeg) and image must be less than 100KB'}
+            context2 = {'form': ImageForm(),
+                        'errorMsg': 'Please upload supported image file format (jpg, jpeg) and image must be less than 100KB'}
 
             return HttpResponse(template2.render(context2, request))
 
@@ -127,7 +131,7 @@ def uploadPage(request):
         return HttpResponse(template2.render(context2, request))
 
 
-#@login_required(login_url='loginPage')
+# @login_required(login_url='loginPage')
 def resultsPage(request, predicted_label):
     global LesionImg
     chart = plotImg(LesionImg)
@@ -136,7 +140,7 @@ def resultsPage(request, predicted_label):
     return render(request, 'lesion_upload.html', context)
 
 
-#@login_required(login_url='loginPage')
+# @login_required(login_url='loginPage')
 def homePage(request):
     template = loader.get_template('index.html')
     context = {'form': ImageForm()}
@@ -188,8 +192,11 @@ def logoutUser(request):
     logout(request)
     return redirect('loginPage')
 
-#@login_required(login_url='loginPage')
+
+# @login_required(login_url='loginPage')
 def refferalPage(request):
+
+    resetLocation()
 
     global Latitude
     if Latitude is None:
@@ -197,7 +204,6 @@ def refferalPage(request):
 
     # calling the Nominatim tool
     loc = Nominatim(user_agent="GetLoc")
-
 
     API_KEY = ('AIzaSyB3ZbQXl3kDtdlyFbhvJarw2-mXoFbh-2o')  # Google Maps API Key
     google_places = GooglePlaces(API_KEY)
@@ -238,24 +244,24 @@ def refferalPage(request):
     return render(request, 'refferal.html', context)
 
 
-#@login_required(login_url='loginPage')
+# @login_required(login_url='loginPage')
 def locationPage(request):
     # context = {}
     # template = loader.get_template('getLocation.html')
-    #gotPost = False
-    #global gotPost
+    # gotPost = False
+    # global gotPost
 
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
 
         setLatLon(float(data.get('lat')), float(data.get('lon')))
-        #gotPost = True
+        # gotPost = True
 
-        print(f"Received data: {Latitude , Longitude}")
-        #return redirect('referral')
+        print(f"Received data: {Latitude, Longitude}")
+        # return redirect('referral')
     else:
         return render(request, 'getLocation.html')
-        #return redirect('referral')
+        # return redirect('referral')
 
     # if gotPost:
     #     return redirect('referral')
@@ -263,14 +269,14 @@ def locationPage(request):
 
 def plotImg(img):
     # Decode image from buffer
-    #image = np.frombuffer(img, np.uint8)
+    # image = np.frombuffer(img, np.uint8)
     image = Image.open(io.BytesIO(img))
     image_np = np.array(image)
 
     # Get RGB data from image
-    red_color = np.histogram(image_np[:,:,0], bins=256, range=[0,256])[0]
-    green_color = np.histogram(image_np[:,:,1], bins=256, range=[0,256])[0]
-    blue_color = np.histogram(image_np[:,:,2], bins=256, range=[0,256])[0]
+    red_color = np.histogram(image_np[:, :, 0], bins=256, range=[0, 256])[0]
+    green_color = np.histogram(image_np[:, :, 1], bins=256, range=[0, 256])[0]
+    blue_color = np.histogram(image_np[:, :, 2], bins=256, range=[0, 256])[0]
 
     # Create DataFrame
     histogram_data = {
@@ -284,3 +290,11 @@ def plotImg(img):
     # Plot histogram using Plotly Express
     fig = px.line(df, x='Intensity', y=['Red', 'Green', 'Blue'], title='Histogram of RGB Colors of the Lesion image')
     return fig.to_html()
+
+
+def resetLocation():
+    global Latitude
+    global Longitude
+
+    Latitude = None
+    Longitude = None
