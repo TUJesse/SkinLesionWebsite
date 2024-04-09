@@ -196,8 +196,6 @@ def logoutUser(request):
 # @login_required(login_url='loginPage')
 def refferalPage(request):
 
-    resetLocation()
-
     global Latitude
     if Latitude is None:
         return redirect('locationPage')
@@ -246,10 +244,7 @@ def refferalPage(request):
 
 # @login_required(login_url='loginPage')
 def locationPage(request):
-    # context = {}
-    # template = loader.get_template('getLocation.html')
-    # gotPost = False
-    # global gotPost
+    resetLocation()
 
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
