@@ -197,6 +197,7 @@ def logoutUser(request):
 def refferalPage(request):
 
     global Latitude
+    global Longitude
     # if Latitude is None:
     #     return redirect('locationPage')
 
