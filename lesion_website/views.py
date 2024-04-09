@@ -244,9 +244,8 @@ def refferalPage(request):
 
 # @login_required(login_url='loginPage')
 def locationPage(request):
-    resetLocation()
-
     if request.method == 'POST':
+        resetLocation()
         data = json.loads(request.body.decode('utf-8'))
 
         setLatLon(float(data.get('lat')), float(data.get('lon')))
